@@ -1,2 +1,3 @@
+ROOT=.
 TOOLCHAIN=gcc_arm
 TARGET=max32625pico
