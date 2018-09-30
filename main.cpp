@@ -1,6 +1,8 @@
 #include "mbed.h"
 #include "rtos.h"
 #include "USBKeyboard.h"
+#include "pwrseq_regs.h"
+#include "pwrman_regs.h"
 
 DigitalOut rLED(LED1, LED_OFF);
 DigitalOut gLED(LED2, LED_OFF);
@@ -107,5 +109,10 @@ int main()
                 read_matrix(scan_keys_callback, data);
                 gLED = !gLED;
                 keyboard.send(&report);
+                if (!button) {
+                        rLED = LED_OFF;
+                        MXC_PWRSEQ->reg0 |= MXC_F_PWRSEQ_REG0_PWR_SYS_REBOOT;
+                        MXC_PWRMAN->pwr_rst_ctrl |= MXC_F_PWRMAN_PWR_RST_CTRL_FIRMWARE_RESET;
+                }
         }
 }
